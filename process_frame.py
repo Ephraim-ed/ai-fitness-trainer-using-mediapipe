@@ -171,10 +171,13 @@ class ProcessFrame:
             ps_lm = keypoints.pose_landmarks
 
             nose_coord = get_landmark_features(ps_lm.landmark, self.dict_features, 'nose', frame_width, frame_height)
+            
             left_shldr_coord, left_elbow_coord, left_wrist_coord, left_hip_coord, left_knee_coord, left_ankle_coord, left_foot_coord = \
                                 get_landmark_features(ps_lm.landmark, self.dict_features, 'left', frame_width, frame_height)
+                                
             right_shldr_coord, right_elbow_coord, right_wrist_coord, right_hip_coord, right_knee_coord, right_ankle_coord, right_foot_coord = \
                                 get_landmark_features(ps_lm.landmark, self.dict_features, 'right', frame_width, frame_height)
+                                                      
 
             offset_angle = find_angle(left_shldr_coord, right_shldr_coord, nose_coord)
 
@@ -199,7 +202,7 @@ class ProcessFrame:
                     frame = cv2.flip(frame, 1)
 
                 if display_inactivity:
-                    cv2.putText(frame, 'Resetting SQUAT_COUNT due to inactivity!!!', (10, frame_height - 90), self.font, 0.5, self.COLORS['blue'], 2, lineType=self.linetype)
+                    cv2.putText(frame, 'Resetting SQUAT_COUNT due to inactivity', (10, frame_height - 90), self.font, 0.5, self.COLORS['blue'], 2, lineType=self.linetype)
                     play_sound = 'reset_counters'
                     self.state_tracker['INACTIVE_TIME_FRONT'] = 0.0
                     self.state_tracker['start_inactive_time_front'] = time.perf_counter()
@@ -258,8 +261,25 @@ class ProcessFrame:
 
 
                 dist_l_sh_hip = abs(left_foot_coord[1]- left_shldr_coord[1])
-                dist_r_sh_hip = abs(right_foot_coord[1] - right_shldr_coord)[1]
-
+                dist_r_sh_hip = abs(right_foot_coord[1] - right_shldr_coord[1])
+              
+                
+                # left_shldr_coord = left_shldr_coord
+                # left_elbow_coord = left_elbow_coord
+                # left_wrist_coord = left_wrist_coord
+                # left_hip_coord = left_hip_coord
+                # left_knee_coord = left_knee_coord
+                # left_ankle_coord = left_ankle_coord
+                # left_foot_coord = left_foot_coord
+                # right_shldr_coord = right_shldr_coord
+                # right_elbow_coord = right_elbow_coord
+                # right_wrist_coord = right_wrist_coord
+                # right_hip_coord = right_hip_coord
+                # right_knee_coord = right_knee_coord
+                # right_ankle_coord = right_ankle_coord
+                # right_foot_coord = right_foot_coord
+                
+                
                 shldr_coord = None
                 elbow_coord = None
                 wrist_coord = None
@@ -267,6 +287,7 @@ class ProcessFrame:
                 knee_coord = None
                 ankle_coord = None
                 foot_coord = None
+
 
                 if dist_l_sh_hip > dist_r_sh_hip:
                     shldr_coord = left_shldr_coord
@@ -324,21 +345,35 @@ class ProcessFrame:
         
                 
                 # Join landmarks.
-                cv2.line(frame, shldr_coord, elbow_coord, self.COLORS['light_blue'], 4, lineType=self.linetype)
-                cv2.line(frame, wrist_coord, elbow_coord, self.COLORS['light_blue'], 4, lineType=self.linetype)
-                cv2.line(frame, shldr_coord, hip_coord, self.COLORS['light_blue'], 4, lineType=self.linetype)
-                cv2.line(frame, knee_coord, hip_coord, self.COLORS['light_blue'], 4,  lineType=self.linetype)
-                cv2.line(frame, ankle_coord, knee_coord,self.COLORS['light_blue'], 4,  lineType=self.linetype)
-                cv2.line(frame, ankle_coord, foot_coord, self.COLORS['light_blue'], 4,  lineType=self.linetype)
+                cv2.line(frame, left_shldr_coord, left_elbow_coord, self.COLORS['light_blue'], 4, lineType=self.linetype)
+                cv2.line(frame, left_wrist_coord, left_elbow_coord, self.COLORS['light_blue'], 4, lineType=self.linetype)
+                cv2.line(frame, left_shldr_coord, left_hip_coord, self.COLORS['light_blue'], 4, lineType=self.linetype)
+                cv2.line(frame, left_knee_coord, left_hip_coord, self.COLORS['light_blue'], 4,  lineType=self.linetype)
+                cv2.line(frame, left_ankle_coord, left_knee_coord,self.COLORS['light_blue'], 4,  lineType=self.linetype)
+                cv2.line(frame, left_ankle_coord, left_foot_coord, self.COLORS['light_blue'], 4,  lineType=self.linetype)
+                cv2.line(frame, right_shldr_coord, right_elbow_coord, self.COLORS['light_blue'], 4, lineType=self.linetype)
+                cv2.line(frame, right_wrist_coord, right_elbow_coord, self.COLORS['light_blue'], 4, lineType=self.linetype)
+                cv2.line(frame, right_shldr_coord, right_hip_coord, self.COLORS['light_blue'], 4, lineType=self.linetype)
+                cv2.line(frame, right_knee_coord, right_hip_coord, self.COLORS['light_blue'], 4,  lineType=self.linetype)
+                cv2.line(frame, right_ankle_coord, right_knee_coord,self.COLORS['light_blue'], 4,  lineType=self.linetype)
+                cv2.line(frame, right_ankle_coord, right_foot_coord, self.COLORS['light_blue'], 4,  lineType=self.linetype)
                 
                 # Plot landmark points
-                cv2.circle(frame, shldr_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
-                cv2.circle(frame, elbow_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
-                cv2.circle(frame, wrist_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
-                cv2.circle(frame, hip_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
-                cv2.circle(frame, knee_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
-                cv2.circle(frame, ankle_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
-                cv2.circle(frame, foot_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
+                cv2.circle(frame, left_shldr_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
+                cv2.circle(frame, left_elbow_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
+                cv2.circle(frame, left_wrist_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
+                cv2.circle(frame, left_hip_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
+                cv2.circle(frame, left_knee_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
+                cv2.circle(frame, left_ankle_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
+                cv2.circle(frame, left_foot_coord, 7, self.COLORS['yellow'], -1,  lineType=self.linetype)
+                cv2.circle(frame, right_shldr_coord, 7, self.COLORS['magenta'], -1,  lineType=self.linetype)
+                cv2.circle(frame, right_elbow_coord, 7, self.COLORS['magenta'], -1,  lineType=self.linetype)
+                cv2.circle(frame, right_wrist_coord, 7, self.COLORS['magenta'], -1,  lineType=self.linetype)
+                cv2.circle(frame, right_hip_coord, 7, self.COLORS['magenta'], -1,  lineType=self.linetype)
+                cv2.circle(frame, right_knee_coord, 7, self.COLORS['magenta'], -1,  lineType=self.linetype)
+                cv2.circle(frame, right_ankle_coord, 7, self.COLORS['magenta'], -1,  lineType=self.linetype)
+                cv2.circle(frame, right_foot_coord, 7, self.COLORS['magenta'], -1,  lineType=self.linetype)
+
 
                 
 

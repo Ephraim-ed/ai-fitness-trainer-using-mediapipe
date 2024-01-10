@@ -8,14 +8,9 @@ from thresholds import get_thresholds
 cap = cv2.VideoCapture(0)
 thresholds = get_thresholds()
 live_process_frame = ProcessFrame(thresholds, flip_frame=True)
+pose = get_mediapipe_pose()
 
-with mp.solutions.pose.Pose(
-                        static_image_mode = False, 
-                        model_complexity = 1,
-                        smooth_landmarks = True,
-                        min_detection_confidence = 0.5,
-                        min_tracking_confidence = 0.5
-                      ) as pose:
+with pose as pose:
     
     while cap.isOpened():
         ret, frame = cap.read()
