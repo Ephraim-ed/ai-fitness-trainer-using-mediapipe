@@ -4,10 +4,9 @@ import numpy as np
 
 from utils import get_mediapipe_pose
 from process_frame import ProcessFrame
-from thresholds import get_thresholds_beginner
-pose = get_mediapipe_pose
+from thresholds import get_thresholds
 cap = cv2.VideoCapture(0)
-thresholds = get_thresholds_beginner()
+thresholds = get_thresholds()
 live_process_frame = ProcessFrame(thresholds, flip_frame=True)
 
 with mp.solutions.pose.Pose(

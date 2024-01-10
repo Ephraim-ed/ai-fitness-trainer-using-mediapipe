@@ -2,7 +2,7 @@ import time
 import cv2
 import numpy as np
 from utils import find_angle, get_landmark_features, draw_text, draw_dotted_line
-from thresholds import get_thresholds_beginner, get_thresholds_pro
+from thresholds import get_thresholds
 
 class ProcessFrame:
     
@@ -506,7 +506,7 @@ class ProcessFrame:
             if self.state_tracker['INACTIVE_TIME'] >= self.thresholds['INACTIVE_THRESH']:
                 self.state_tracker['SQUAT_COUNT'] = 0
                 self.state_tracker['IMPROPER_SQUAT'] = 0
-                # cv2.putText(frame, 'Resetting SQUAT_COUNT due to inactivity!!!', (10, frame_height - 25), self.font, 0.7, self.COLORS['blue'], 2)
+                cv2.putText(frame, 'Resetting SQUAT_COUNT due to inactivity!!!', (10, frame_height - 25), self.font, 0.7, self.COLORS['blue'], 2)
                 display_inactivity = True
 
             self.state_tracker['start_inactive_time'] = end_time
